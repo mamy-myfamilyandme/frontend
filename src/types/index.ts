@@ -4,6 +4,9 @@ export type ProfileType = string;
 // 프로필 역할 타입 (UI 아이콘 매핑용)
 export type ProfileRole = 'ME' | 'SPOUSE' | 'KIDS' | 'PARENTS';
 
+// 시간대 타입
+export type TimeOfDay = 'morning' | 'lunch' | 'afternoon' | 'evening' | 'night';
+
 // 프로필 정보
 export interface Profile {
   id: ProfileType;
@@ -26,4 +29,13 @@ export interface HealthMetric {
   status: HealthStatus;
   trend: TrendType;
   lastUpdate: string;
+}
+
+// 복약 항목
+export interface MedicationItem {
+  id: number;
+  name: string;
+  time: string;
+  taken: boolean;
+  timeSlot: TimeOfDay;
 }

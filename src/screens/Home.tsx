@@ -4,10 +4,23 @@ import { Feather } from '@expo/vector-icons';
 import { ProfileSwitcher } from '../components/home/ProfileSwitcher';
 import { QuickActionButton } from '../components/home/QuickActionButton';
 import { HealthMetricCard } from '../components/home/HealthMetricCard';
-import { ProfileType, Profile, HealthMetric } from '../types';
+import { MedicationCheckCard } from '../components/home/MedicationCheckCard';
+import {
+  ProfileType,
+  Profile,
+  HealthMetric,
+  MedicationItem,
+  TimeOfDay,
+} from '../types';
 
 export function Home() {
   const [activeProfile, setActiveProfile] = useState<ProfileType>('ME');
+  const [medications, setMedications] = useState<MedicationItem[]>([
+    { id: 1, name: '혈압약', time: '08:00', taken: true, timeSlot: 'morning' },
+    { id: 2, name: '소화제', time: '08:30', taken: true, timeSlot: 'morning' },
+    { id: 3, name: '비타민', time: '12:00', taken: false, timeSlot: 'lunch' },
+    { id: 4, name: '혈당약', time: '18:00', taken: false, timeSlot: 'evening' },
+  ]);
 
   // TODO: 백엔드 연동 시 API에서 가져올 프로필 데이터
   // 회원가입 시 등록한 가족 구성원 목록을 동적으로 표시
@@ -47,6 +60,21 @@ export function Home() {
       lastUpdate: '오늘 아침',
     },
   ];
+
+  const handleMedicationToggle = (id: number) => {
+    setMedications((prev) =>
+      prev.map((med) => (med.id === id ? { ...med, taken: !med.taken } : med))
+    );
+  };
+
+  const getCurrentTimeSlot = (): TimeOfDay => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'morning';
+    if (hour < 14) return 'lunch';
+    if (hour < 18) return 'afternoon';
+    if (hour < 21) return 'evening';
+    return 'night';
+  };
 
   return (
     <View style={styles.container}>
@@ -113,6 +141,15 @@ export function Home() {
               <HealthMetricCard key={index} data={metric} />
             ))}
           </ScrollView>
+
+          {/* Medication Check */}
+          <MedicationCheckCard
+            timeOfDay={getCurrentTimeSlot()}
+            medications={medications.filter(
+              (med) => med.timeSlot === getCurrentTimeSlot()
+            )}
+            onMedicationCheck={handleMedicationToggle}
+          />
         </View>
       </ScrollView>
     </View>
