@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { ProfileSwitcher } from '../components/home/ProfileSwitcher';
+import { QuickActionButton } from '../components/home/QuickActionButton';
 import { ProfileType, Profile } from '../types';
 
 export function Home() {
@@ -49,6 +50,29 @@ export function Home() {
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.content}>
+          {/* Quick Actions */}
+          <View style={styles.quickActions}>
+            <QuickActionButton
+              icon="bell"
+              label="복약 알림"
+              onPress={() => console.log('복약 알림')}
+            />
+            <QuickActionButton
+              icon="calendar"
+              label="진료 예약"
+              onPress={() => console.log('진료 예약')}
+            />
+            <QuickActionButton
+              icon="activity"
+              label="건강 기록"
+              onPress={() => console.log('건강 기록')}
+            />
+            <QuickActionButton
+              icon="dollar-sign"
+              label="의료비"
+              onPress={() => console.log('의료비')}
+            />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -130,5 +154,10 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
     gap: 16,
+  },
+  quickActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
   },
 });
