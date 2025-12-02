@@ -5,11 +5,14 @@ import { ProfileSwitcher } from '../components/home/ProfileSwitcher';
 import { QuickActionButton } from '../components/home/QuickActionButton';
 import { HealthMetricCard } from '../components/home/HealthMetricCard';
 import { MedicationCheckCard } from '../components/home/MedicationCheckCard';
+import { TodayTaskList } from '../components/home/TodayTaskList';
+import { ExpensesSummaryCard } from '../components/home/ExpensesSummaryCard';
 import {
   ProfileType,
   Profile,
   HealthMetric,
   MedicationItem,
+  TodayTask,
   TimeOfDay,
 } from '../types';
 
@@ -59,6 +62,12 @@ export function Home() {
       trend: 'up',
       lastUpdate: '오늘 아침',
     },
+  ];
+
+  const todayTasks: TodayTask[] = [
+    { id: 1, type: 'MED', title: '아침 약 복용', time: '08:00', done: true },
+    { id: 2, type: 'HOSPITAL', title: '정형외과 진료', time: '14:00', done: false },
+    { id: 3, type: 'MED', title: '저녁 약 복용', time: '18:00', done: false },
   ];
 
   const handleMedicationToggle = (id: number) => {
@@ -149,6 +158,18 @@ export function Home() {
               (med) => med.timeSlot === getCurrentTimeSlot()
             )}
             onMedicationCheck={handleMedicationToggle}
+          />
+
+          {/* Today's Tasks */}
+          <TodayTaskList tasks={todayTasks} />
+
+          {/* Expenses Summary */}
+          <ExpensesSummaryCard
+            totalAmount="1,250,000"
+            insuranceClaim="850,000"
+            actualCost="400,000"
+            unclaimedCount={3}
+            onNavigate={() => console.log('의료비 상세')}
           />
         </View>
       </ScrollView>

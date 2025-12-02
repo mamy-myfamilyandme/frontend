@@ -39,3 +39,12 @@ export interface MedicationItem {
   taken: boolean;
   timeSlot: TimeOfDay;
 }
+
+// 오늘의 할 일
+export interface TodayTask {
+  id: number;
+  type: 'MED' | 'HOSPITAL';
+  title: string;
+  time: string;
+  done: boolean;
+}
