@@ -1,12 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { Home } from './src/screens';
+import { BottomNav, Screen } from './src/components/navigation/BottomNav';
 
 export default function App() {
+  const [currentScreen, setCurrentScreen] = useState<Screen>('home');
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>MamyApp</Text>
-      <Text style={styles.subtitle}>React Native + Expo</Text>
+      <Home />
+      <BottomNav currentScreen={currentScreen} onNavigate={setCurrentScreen} />
       <StatusBar style="auto" />
     </View>
   );
@@ -15,17 +19,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
+    backgroundColor: '#f9fafb',
   },
 });
