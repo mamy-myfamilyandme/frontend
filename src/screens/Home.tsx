@@ -3,7 +3,8 @@ import { View, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-nati
 import { Feather } from '@expo/vector-icons';
 import { ProfileSwitcher } from '../components/home/ProfileSwitcher';
 import { QuickActionButton } from '../components/home/QuickActionButton';
-import { ProfileType, Profile } from '../types';
+import { HealthMetricCard } from '../components/home/HealthMetricCard';
+import { ProfileType, Profile, HealthMetric } from '../types';
 
 export function Home() {
   const [activeProfile, setActiveProfile] = useState<ProfileType>('ME');
@@ -18,6 +19,33 @@ export function Home() {
     { id: 'KIDS_1', name: '신지아', label: '자녀', role: 'KIDS' },
     { id: 'KIDS_2', name: '신민혁', label: '자녀', role: 'KIDS' },
     { id: 'PARENTS', name: '부모님', label: '부모', role: 'PARENTS' },
+  ];
+
+  const healthMetrics: HealthMetric[] = [
+    {
+      label: '혈압',
+      value: '120/80',
+      unit: 'mmHg',
+      status: 'good',
+      trend: 'stable',
+      lastUpdate: '2시간 전',
+    },
+    {
+      label: '혈당',
+      value: '95',
+      unit: 'mg/dL',
+      status: 'good',
+      trend: 'down',
+      lastUpdate: '1시간 전',
+    },
+    {
+      label: '체중',
+      value: '68.5',
+      unit: 'kg',
+      status: 'warning',
+      trend: 'up',
+      lastUpdate: '오늘 아침',
+    },
   ];
 
   return (
@@ -73,6 +101,18 @@ export function Home() {
               onPress={() => console.log('의료비')}
             />
           </View>
+
+          {/* Health Metrics */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.section}
+            contentContainerStyle={styles.sectionContent}
+          >
+            {healthMetrics.map((metric, index) => (
+              <HealthMetricCard key={index} data={metric} />
+            ))}
+          </ScrollView>
         </View>
       </ScrollView>
     </View>
@@ -159,5 +199,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 12,
+  },
+  section: {
+    flexDirection: 'row',
+  },
+  sectionContent: {
+    gap: 12,
+    paddingRight: 30,
   },
 });

@@ -11,3 +11,19 @@ export interface Profile {
   label: string;
   role?: ProfileRole; // UI 아이콘 표시용
 }
+
+// 건강 상태
+export type HealthStatus = 'good' | 'warning' | 'danger';
+
+// 트렌드
+export type TrendType = 'up' | 'down' | 'stable';
+
+// 건강 지표
+export interface HealthMetric {
+  label: string;
+  value: string;
+  unit: string;
+  status: HealthStatus;
+  trend: TrendType;
+  lastUpdate: string;
+}
