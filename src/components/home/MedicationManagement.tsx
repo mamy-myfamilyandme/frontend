@@ -16,6 +16,7 @@ interface MedicationManagementProps {
 }
 
 type TimeSlot = 'MORNING' | 'LUNCH' | 'DINNER' | 'BEDTIME';
+type ViewMode = 'TODAY' | 'WEEKLY' | 'MONTHLY';
 
 interface Medication {
   id: number;
@@ -45,6 +46,7 @@ export function MedicationManagement({
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedFilter, setSelectedFilter] = useState<'ALL' | TimeSlot>('ALL');
+  const [viewMode, setViewMode] = useState<ViewMode>('WEEKLY');
   const weekDays = getWeekDays();
 
   const [medications, setMedications] = useState<Medication[]>([
@@ -96,6 +98,12 @@ export function MedicationManagement({
     { id: 'BEDTIME', label: '취침전' },
   ];
 
+  const viewModes: { id: ViewMode; label: string }[] = [
+    { id: 'TODAY', label: '일간' },
+    { id: 'WEEKLY', label: '주간' },
+    { id: 'MONTHLY', label: '월간' },
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -108,34 +116,61 @@ export function MedicationManagement({
         </TouchableOpacity>
       </View>
 
-      {/* 주간 캘린더 */}
-      <View style={styles.calendarContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.calendarContent}>
-          {weekDays.map((date, index) => {
-            const isSelected = date.getDate() === selectedDate.getDate();
-            const isToday = date.getDate() === new Date().getDate();
-            const days = ['일', '월', '화', '수', '목', '금', '토'];
-
-            return (
-              <TouchableOpacity
-                key={index}
-                style={[styles.dateItem, isSelected && styles.dateItemSelected]}
-                onPress={() => setSelectedDate(date)}
+      {/* 뷰 모드 탭 */}
+      <View style={styles.viewModeContainer}>
+        <View style={styles.viewModeWrapper}>
+          {viewModes.map((mode) => (
+            <TouchableOpacity
+              key={mode.id}
+              style={[
+                styles.viewModeButton,
+                viewMode === mode.id && styles.viewModeButtonSelected,
+              ]}
+              onPress={() => setViewMode(mode.id)}
+            >
+              <Text
+                style={[
+                  styles.viewModeText,
+                  viewMode === mode.id && styles.viewModeTextSelected,
+                ]}
               >
-                <Text style={[styles.dayText, isSelected && styles.dayTextSelected]}>
-                  {days[date.getDay()]}
-                </Text>
-                <View style={[styles.dateCircle, isSelected && styles.dateCircleSelected]}>
-                  <Text style={[styles.dateText, isSelected && styles.dateTextSelected]}>
-                    {date.getDate()}
-                  </Text>
-                </View>
-                {isToday && <View style={styles.todayDot} />}
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+                {mode.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
+
+      {/* 주간 캘린더 (WEEKLY 모드일 때만 표시하거나 모드에 따라 다르게 표시) */}
+      {viewMode === 'WEEKLY' && (
+        <View style={styles.calendarContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.calendarContent}>
+            {weekDays.map((date, index) => {
+              const isSelected = date.getDate() === selectedDate.getDate();
+              const isToday = date.getDate() === new Date().getDate();
+              const days = ['일', '월', '화', '수', '목', '금', '토'];
+
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={[styles.dateItem, isSelected && styles.dateItemSelected]}
+                  onPress={() => setSelectedDate(date)}
+                >
+                  <Text style={[styles.dayText, isSelected && styles.dayTextSelected]}>
+                    {days[date.getDay()]}
+                  </Text>
+                  <View style={[styles.dateCircle, isSelected && styles.dateCircleSelected]}>
+                    <Text style={[styles.dateText, isSelected && styles.dateTextSelected]}>
+                      {date.getDate()}
+                    </Text>
+                  </View>
+                  {isToday && <View style={styles.todayDot} />}
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        </View>
+      )}
 
       {/* 필터 탭 */}
       <View style={styles.filterContainer}>
@@ -241,6 +276,40 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 5,
+  },
+  viewModeContainer: {
+    paddingHorizontal: 20,
+    marginTop: 12,
+  },
+  viewModeWrapper: {
+    flexDirection: 'row',
+    backgroundColor: '#e5e7eb',
+    borderRadius: 12,
+    padding: 4,
+    gap: 4,
+  },
+  viewModeButton: {
+    flex: 1,
+    paddingVertical: 8,
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  viewModeButtonSelected: {
+    backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  viewModeText: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#6b7280',
+  },
+  viewModeTextSelected: {
+    color: '#111827',
+    fontWeight: '600',
   },
   calendarContainer: {
     paddingVertical: 16,

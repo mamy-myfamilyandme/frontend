@@ -14,9 +14,14 @@ import {
   MedicationItem,
   TodayTask,
   TimeOfDay,
+  Screen,
 } from '../types';
 
-export function Home() {
+interface HomeProps {
+  onNavigate?: (screen: Screen) => void;
+}
+
+export function Home({ onNavigate }: HomeProps) {
   const [activeProfile, setActiveProfile] = useState<ProfileType>('ME');
   const [medications, setMedications] = useState<MedicationItem[]>([
     { id: 1, name: '혈압약', time: '08:00', taken: true, timeSlot: 'morning' },
@@ -120,7 +125,7 @@ export function Home() {
             <QuickActionButton
               icon="bell"
               label="복약 알림"
-              onPress={() => console.log('복약 알림')}
+              onPress={() => onNavigate?.('medication')}
             />
             <QuickActionButton
               icon="calendar"
@@ -158,6 +163,7 @@ export function Home() {
               (med) => med.timeSlot === getCurrentTimeSlot()
             )}
             onMedicationCheck={handleMedicationToggle}
+            onPress={() => onNavigate?.('medication')}
           />
 
           {/* Today's Tasks */}
