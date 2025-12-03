@@ -1,3 +1,6 @@
+// 화면 타입 (네비게이션용)
+export type Screen = 'home' | 'medication' | 'medicationScan' | 'community' | 'all';
+
 // 프로필 타입 (백엔드 연동 시 동적으로 생성될 수 있도록 string으로 변경)
 export type ProfileType = string;
 
