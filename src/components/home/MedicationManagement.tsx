@@ -47,7 +47,7 @@ export function MedicationManagement({
   const [selectedFilter, setSelectedFilter] = useState<'ALL' | TimeSlot>('ALL');
   const weekDays = getWeekDays();
 
-  const baseMedications: Medication[] = [
+  const [medications, setMedications] = useState<Medication[]>([
     {
       id: 1,
       name: '혈압약 (암로디핀)',
@@ -75,9 +75,16 @@ export function MedicationManagement({
       taken: false,
       time: '19:00',
     },
-  ];
+  ]);
 
-  const filteredMedications = baseMedications.filter(
+  // 복약 상태 토글
+  const handleToggleMedication = (id: number) => {
+    setMedications((prev) =>
+      prev.map((med) => (med.id === id ? { ...med, taken: !med.taken } : med))
+    );
+  };
+
+  const filteredMedications = medications.filter(
     (med) => selectedFilter === 'ALL' || med.timeSlot === selectedFilter
   );
 
@@ -150,7 +157,12 @@ export function MedicationManagement({
       {/* 복약 리스트 */}
       <ScrollView style={styles.content} contentContainerStyle={styles.listContent}>
         {filteredMedications.map((med) => (
-          <View key={med.id} style={styles.card}>
+          <TouchableOpacity
+            key={med.id}
+            style={styles.card}
+            activeOpacity={0.9}
+            onPress={() => handleToggleMedication(med.id)}
+          >
             <View style={styles.cardLeft}>
               <View style={[styles.iconBox, med.taken && styles.iconBoxDone]}>
                 <MaterialCommunityIcons
@@ -173,15 +185,15 @@ export function MedicationManagement({
                 <Feather name="clock" size={12} color="#6b7280" />
                 <Text style={styles.timeText}>{med.time}</Text>
               </View>
-              <TouchableOpacity style={[styles.checkButton, med.taken && styles.checkButtonDone]}>
+              <View style={[styles.checkButton, med.taken && styles.checkButtonDone]}>
                 {med.taken ? (
                   <Feather name="check" size={20} color="#ffffff" />
                 ) : (
                   <View style={styles.checkRing} />
                 )}
-              </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
         {filteredMedications.length === 0 && (
           <View style={styles.emptyState}>
