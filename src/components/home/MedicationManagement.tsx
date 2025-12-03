@@ -21,13 +21,28 @@ interface Medication {        // 약 하나의 정보
   time: string;               // 시간 (예: "08:00")
 }
 
+// component함수
 export function MedicationManagement({
   currentScreen,   // 구조분해 할당으로 props 받기
   onNavigate,
-}: MedicationManagementProps) {
+  }: MedicationManagementProps) {
+      // 3. 내부 로직 (변수 선언)
+  const baseMedications: Medication[] = [
+    {
+      id: 1,
+      name: "혈압약 (암로디핀)",
+      dosage: "1정",
+      condition: "식후 30분",
+      timeSlot: "MORNING",
+      taken: false,
+      time: "08:00",
+    },
+  ];
+  
   return (
     <div>
       <h1>복약 관리</h1>
+      <pre>{JSON.stringify(baseMedications, null, 2)}</pre>
     </div>
   );
 }
