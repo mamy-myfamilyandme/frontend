@@ -7,8 +7,10 @@ import {
   Animated,
 } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Screen } from '../../types';
 
-export type Screen = 'home' | 'medication' | 'medicationScan' | 'community' | 'all';
+// 다른 파일에서도 사용할 수 있도록 re-export
+export { Screen };
 
 interface BottomNavProps {
   currentScreen: Screen;
